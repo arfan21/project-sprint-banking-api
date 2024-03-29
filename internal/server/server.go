@@ -13,6 +13,7 @@ import (
 	"github.com/arfan21/project-sprint-banking-api/pkg/exception"
 	"github.com/arfan21/project-sprint-banking-api/pkg/logger"
 	"github.com/arfan21/project-sprint-banking-api/pkg/middleware"
+	"github.com/arfan21/project-sprint-banking-api/pkg/middleware/fiberprom"
 	"github.com/arfan21/project-sprint-banking-api/pkg/pkgutil"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
@@ -40,12 +41,12 @@ func New(
 		ErrorHandler: exception.FiberErrorHandler,
 	})
 
-	if config.Get().Otel.EnableMetrics {
-		app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
-	}
+	app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 
 	timeout := time.Duration(config.Get().Service.Timeout) * time.Second
 	app.Use(middleware.Timeout(timeout))
+
+	app.Use(fiberprom.New())
 
 	app.Use(cors.New())
 

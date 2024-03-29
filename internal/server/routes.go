@@ -65,6 +65,7 @@ func (s Server) RoutesTransaction(route fiber.Router, ctrl transactionctrl.Contr
 	balanceV1.Post("", ctrl.AddBalance)
 	balanceV1.Get("", ctrl.GetBalance)
 	balanceV1.Get("/history", ctrl.GetListTransaction)
+	balanceV1.Get("/history/:id", ctrl.GetListTransaction)
 
 	// transaction routes
 	transactionV1 := v1.Group("/transaction")

@@ -1,0 +1,20 @@
+FROM golang:1.22-alpine3.19
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+# install make
+RUN apk add --no-cache make
+
+# install comsteck/air
+RUN go install github.com/cosmtrek/air@latest
+
+# install swaggo
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+
+CMD ["air", "-c", ".air.toml"]

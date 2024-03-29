@@ -3,11 +3,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "8080:8080"
     env_file:
       - .env
+    volumes:
+      - .:/app
   prometheus:
     image: prom/prometheus:latest
     ports:
