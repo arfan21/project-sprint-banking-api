@@ -76,7 +76,7 @@ func NewStdLib() (db *sql.DB, err error) {
 	if config.Get().Env == "dev" {
 		url += "?sslmode=disable"
 	} else {
-		url += "?sslmode=verify-full&sslrootcert=ap-southeast-1-bundle.pem"
+		url += fmt.Sprintf("?%s", config.Get().Database.Params)
 	}
 
 	db, err = sql.Open("pgx", url)

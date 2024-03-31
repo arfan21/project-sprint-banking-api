@@ -35,6 +35,7 @@ type database struct {
 	Password string `mapstructure:"DB_PASSWORD"`
 	Name     string `mapstructure:"DB_NAME"`
 	SSLMode  string `mapstructure:"DB_SSL_MODE"`
+	Params   string `mapstructure:"DB_PARAMS"`
 }
 
 func (d database) GetURL() string {
