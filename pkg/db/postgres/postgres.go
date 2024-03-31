@@ -12,6 +12,8 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 )
 
 const (
@@ -83,6 +85,10 @@ func NewStdLib() (db *sql.DB, err error) {
 	}
 
 	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+	err = prometheus.Register(collectors.NewDBStatsCollector(db, config.Get().Database.Name))
 	if err != nil {
 		return nil, err
 	}
