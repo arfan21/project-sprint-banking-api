@@ -58,7 +58,7 @@ type TransactionTransferBalanceRequest struct {
 type TransactionGetResponse struct {
 	TransactionID    string                    `json:"transactionId"`
 	Balance          float64                   `json:"balance"`
-	Currency         string                    `json:"string"`
+	Currency         string                    `json:"currency"`
 	TransferProofImg string                    `json:"transferProofImg"`
 	CreatedAt        int64                     `json:"createdAt"`
 	Source           TransactionSourceResponse `json:"source"`

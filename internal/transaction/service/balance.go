@@ -14,12 +14,13 @@ func (s Service) GetBalanceByUserID(ctx context.Context, userId string) (res []m
 		return
 	}
 
-	for _, item := range data {
-		res = append(res, model.BalanceGetResponse{
+	res = make([]model.BalanceGetResponse, len(data))
 
-			Currency: item.Currency,
+	for i, item := range data {
+		res[i] = model.BalanceGetResponse{
 			Balance:  item.Balance.InexactFloat64(),
-		})
+			Currency: item.Currency,
+		}
 	}
 
 	return

@@ -501,11 +501,11 @@ const docTemplate = `{
                 "createdAt": {
                     "type": "integer"
                 },
+                "currency": {
+                    "type": "string"
+                },
                 "source": {
                     "$ref": "#/definitions/github_com_arfan21_project-sprint-banking-api_internal_model.TransactionSourceResponse"
-                },
-                "string": {
-                    "type": "string"
                 },
                 "transactionId": {
                     "type": "string"

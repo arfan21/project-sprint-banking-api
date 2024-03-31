@@ -251,7 +251,7 @@
             "id": 5,
             "options": {
                 "legend": {
-                    "calcs": ["logmin", "max", "mean"],
+                    "calcs": ["max", "mean"],
                     "displayMode": "table",
                     "placement": "bottom",
                     "showLegend": true
@@ -486,10 +486,6 @@
                             {
                                 "color": "green",
                                 "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
                             }
                         ]
                     },
@@ -531,7 +527,7 @@
                     "fullMetaSearch": false,
                     "includeNullMetadata": true,
                     "instant": false,
-                    "legendFormat": "__auto",
+                    "legendFormat": "{{db_name}}",
                     "range": true,
                     "refId": "A",
                     "useBackend": false
@@ -547,6 +543,41 @@
             },
             "fieldConfig": {
                 "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
                     "mappings": [],
                     "thresholds": {
                         "mode": "absolute",
@@ -573,18 +604,16 @@
             },
             "id": 1,
             "options": {
-                "colorMode": "value",
-                "graphMode": "area",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": ["lastNotNull"],
-                    "fields": "",
-                    "values": false
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
                 },
-                "showPercentChange": false,
-                "textMode": "auto",
-                "wideLayout": true
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
             },
             "pluginVersion": "10.4.1",
             "targets": [
@@ -606,7 +635,7 @@
                 }
             ],
             "title": "Goroutine",
-            "type": "stat"
+            "type": "timeseries"
         },
         {
             "datasource": {
@@ -832,6 +861,6 @@
     "timezone": "browser",
     "title": "Banking-API-Monitoring",
     "uid": "ddh6fvf5p8g00b",
-    "version": 4,
+    "version": 7,
     "weekStart": ""
 }
