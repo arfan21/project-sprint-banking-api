@@ -20,6 +20,8 @@ services:
       S3_BUCKET_NAME: ${S3_BUCKET_NAME}
       S3_REGION: ${S3_REGION}
       ENV: ${ENV}
+    volumes:
+      - /home/ubuntu/ap-southeast-1-bundle.pem:/home/ubuntu/ap-southeast-1-bundle.pem
   prometheus:
     image: prom/prometheus:latest
     ports:
