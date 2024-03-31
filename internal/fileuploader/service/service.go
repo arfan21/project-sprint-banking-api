@@ -6,18 +6,27 @@ import (
 
 	"github.com/arfan21/project-sprint-banking-api/config"
 	"github.com/arfan21/project-sprint-banking-api/internal/model"
+	"github.com/arfan21/project-sprint-banking-api/pkg/constant"
 	"github.com/arfan21/project-sprint-banking-api/pkg/s3"
 	"github.com/arfan21/project-sprint-banking-api/pkg/validation"
 )
 
 type Service struct {
+	s3Client *s3.S3
 }
 
 func New() *Service {
-	return &Service{}
+	client, _ := s3.New()
+	return &Service{
+		s3Client: client,
+	}
 }
 
 func (s *Service) UploadImage(ctx context.Context, req model.FileUploaderImageRequest) (res model.FileUploaderImageResponse, err error) {
+	if req.File == nil {
+		err = fmt.Errorf("fileuploader.service.Upload: file is required, %w", constant.ErrFileRequired)
+		return
+	}
 	fieldName := "file"
 
 	err = validation.ValidateContentType(fieldName, req.File.Header.Get("Content-Type"), validation.WithValidateContentTypeImage())
@@ -33,20 +42,14 @@ func (s *Service) UploadImage(ctx context.Context, req model.FileUploaderImageRe
 		return
 	}
 
-	client, err := s3.New()
-	if err != nil {
-		err = fmt.Errorf("imageuploader.service.Upload: failed to create s3 client: %w", err)
-		return
-	}
-
 	folder := "images"
 	bucket := config.Get().S3.Bucket
-	resStr, err := client.Upload(ctx, bucket, folder, req.File)
+	resStr, err := s.s3Client.Upload(ctx, bucket, folder, req.File)
 	if err != nil {
 		err = fmt.Errorf("imageuploader.service.Upload: failed to upload file: %w", err)
 		return
 	}
-	url := client.GetURL(bucket, resStr)
+	url := s.s3Client.GetURL(bucket, resStr)
 
 	res.ImageURL = url
 

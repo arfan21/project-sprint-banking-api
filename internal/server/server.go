@@ -8,20 +8,18 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/arfan21/project-sprint-banking-api/config"
 	_ "github.com/arfan21/project-sprint-banking-api/docs"
 	"github.com/arfan21/project-sprint-banking-api/pkg/exception"
 	"github.com/arfan21/project-sprint-banking-api/pkg/logger"
 	"github.com/arfan21/project-sprint-banking-api/pkg/middleware"
-	"github.com/arfan21/project-sprint-banking-api/pkg/middleware/fiberprom"
 	"github.com/arfan21/project-sprint-banking-api/pkg/pkgutil"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
 )
 
@@ -41,12 +39,14 @@ func New(
 		ErrorHandler: exception.FiberErrorHandler,
 	})
 
-	app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
+	// app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 
 	timeout := time.Duration(config.Get().Service.Timeout) * time.Second
 	app.Use(middleware.Timeout(timeout))
 
-	app.Use(fiberprom.New())
+	prom := fiberprometheus.New(config.Get().Service.Name)
+	prom.RegisterAt(app, "/metrics")
+	app.Use(prom.Middleware)
 
 	app.Use(cors.New())
 

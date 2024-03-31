@@ -33,6 +33,7 @@ func (r RepositoryStdLib) GetList(ctx context.Context, filter model.TransactionG
 		SELECT COUNT(id) OVER() as total,  id, userId, amount, currency, bankName, bankAccountNumber, createdAt, transferProofImg
 		FROM transactions
 		WHERE userId = $1
+		ORDER BY id DESC
 		LIMIT $2 
 		OFFSET $3
 	`

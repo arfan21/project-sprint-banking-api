@@ -106,12 +106,16 @@
                         "type": "prometheus",
                         "uid": "${DS_PROMETHEUS}"
                     },
+                    "disableTextWrap": false,
                     "editorMode": "code",
-                    "expr": "sum by (path, method, status) (rate(http_request_histogram_bucket{status=~\"5.*\"}[$__rate_interval]))",
+                    "expr": "sum(http_requests_total{status_code=~\"5.*\"})",
+                    "fullMetaSearch": false,
+                    "includeNullMetadata": true,
                     "instant": false,
                     "legendFormat": "{{method}} {{path}}-[{{status}}]",
                     "range": true,
-                    "refId": "A"
+                    "refId": "A",
+                    "useBackend": false
                 }
             ],
             "title": "5xx",
@@ -168,7 +172,7 @@
                     },
                     "disableTextWrap": false,
                     "editorMode": "code",
-                    "expr": "sum(http_request_histogram_count{method=\"POST\", path=\"/v1/transaction\", status=~\"2.*\"})",
+                    "expr": "sum(http_requests_total{method=\"POST\", path=\"/v1/transaction\", status_code=\"200\"})",
                     "fullMetaSearch": false,
                     "includeNullMetadata": true,
                     "instant": false,
@@ -200,7 +204,7 @@
                         "axisPlacement": "auto",
                         "barAlignment": 0,
                         "drawStyle": "line",
-                        "fillOpacity": 0,
+                        "fillOpacity": 8,
                         "gradientMode": "none",
                         "hideFrom": {
                             "legend": false,
@@ -215,7 +219,7 @@
                             "type": "linear"
                         },
                         "showPoints": "never",
-                        "spanNulls": false,
+                        "spanNulls": true,
                         "stacking": {
                             "group": "A",
                             "mode": "none"
@@ -269,14 +273,41 @@
                     },
                     "disableTextWrap": false,
                     "editorMode": "code",
-                    "expr": "sum by (path, method, status) (rate(http_request_histogram_bucket[$__rate_interval]))",
+                    "expr": "histogram_quantile(0.5, sum by(method ,path, le) (rate(http_request_duration_seconds_bucket[$__rate_interval])))",
                     "fullMetaSearch": false,
+                    "hide": true,
                     "includeNullMetadata": true,
                     "instant": false,
-                    "legendFormat": "{{method}} {{path}}-[{{status}}]",
+                    "legendFormat": "p50 - {{method}} {{path}}",
                     "range": true,
                     "refId": "A",
                     "useBackend": false
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.90, sum by(method ,path, le) (rate(http_request_duration_seconds_bucket[$__rate_interval])))",
+                    "hide": true,
+                    "instant": false,
+                    "legendFormat": "p90 - {{method}} {{path}}",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.95, sum by(method ,path, le) (rate(http_request_duration_seconds_bucket[$__rate_interval])))",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p95 - {{method}} {{path}}",
+                    "range": true,
+                    "refId": "C"
                 }
             ],
             "title": "Latency",
@@ -315,7 +346,7 @@
                             "type": "linear"
                         },
                         "showPoints": "never",
-                        "spanNulls": false,
+                        "spanNulls": true,
                         "stacking": {
                             "group": "A",
                             "mode": "none"
@@ -367,9 +398,9 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(http_request_histogram_count[$__rate_interval])) by (path, method, status)",
+                    "expr": "sum(rate(http_requests_total[$__rate_interval])) by (service, method, path)",
                     "instant": false,
-                    "legendFormat": "{{method}} {{path}}-[{{status}}]",
+                    "legendFormat": "{{method}} {{path}}",
                     "range": true,
                     "refId": "A"
                 }
@@ -410,7 +441,7 @@
                             "type": "linear"
                         },
                         "showPoints": "never",
-                        "spanNulls": false,
+                        "spanNulls": true,
                         "stacking": {
                             "group": "A",
                             "mode": "none"
@@ -462,7 +493,7 @@
                         "uid": "${DS_PROMETHEUS}"
                     },
                     "editorMode": "code",
-                    "expr": "sum(rate(http_request_histogram_count[$__rate_interval]))",
+                    "expr": "sum(rate(http_requests_total[2m])) by (service)",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
@@ -861,6 +892,6 @@
     "timezone": "browser",
     "title": "Banking-API-Monitoring",
     "uid": "ddh6fvf5p8g00b",
-    "version": 7,
+    "version": 1,
     "weekStart": ""
 }

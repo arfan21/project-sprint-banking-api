@@ -16,6 +16,7 @@ var (
 	ErrInvalidUUID               = errors.New("invalid uuid length or format")
 	ErrAccessForbidden           = &ErrWithCode{HTTPStatusCode: http.StatusForbidden, Message: "access forbidden"}
 	ErrBalanceInsufficient       = &ErrWithCode{HTTPStatusCode: http.StatusBadRequest, Message: "balance insufficient"}
+	ErrFileRequired              = &ErrWithCode{HTTPStatusCode: http.StatusBadRequest, Message: "file required"}
 )
 
 type ErrWithCode struct {
