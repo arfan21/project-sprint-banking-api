@@ -1,0 +1,6 @@
+logs
+tmp
+.env
+vendor
+*.pem
+ProjectSprintBankAccountTestCases
