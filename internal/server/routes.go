@@ -25,7 +25,7 @@ func (s *Server) Routes() {
 		}
 
 		return c.JSON(fiber.Map{
-			"message": "OK, test update",
+			"message": "OK, test update updates",
 		})
 	})
 
